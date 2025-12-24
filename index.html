@@ -6,7 +6,7 @@
     <title>Merry Xmas Sun</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Montserrat:wght@200;300&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,293 +15,119 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             overflow: hidden;
             width: 100vw;
             height: 100vh;
-            background: linear-gradient(135deg, #0a0e27 0%, #1a0a2e 50%, #16213e 100%);
+            background: linear-gradient(180deg, #1a2a3a 0%, #2d4157 40%, #1f3242 100%);
             position: relative;
         }
 
-        /* Background bokeh lights */
-        .bg-bokeh {
+        #canvas {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
+        }
+
+        .content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 8vh;
+            pointer-events: none;
+        }
+
+        .title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.85);
+            letter-spacing: 0.25em;
+            text-align: center;
+            text-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+            margin-bottom: 5vh;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 0.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .tag {
+            position: absolute;
+            top: 52%;
+            left: 58%;
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(0.5rem, 1vw, 0.7rem);
+            font-weight: 200;
+            color: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+            padding: 4px 10px;
+            border-radius: 3px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            letter-spacing: 0.05em;
+            transform-origin: top center;
+            animation: sway 6s ease-in-out infinite;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 1.5s forwards, sway 6s ease-in-out 2s infinite;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .tag::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 15px;
+            background: linear-gradient(to top, rgba(255, 255, 255, 0.3), transparent);
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(2deg); }
+            50% { transform: rotate(-2deg); }
+        }
+
+        .button {
+            position: absolute;
+            bottom: 12vh;
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(0.8rem, 1.5vw, 1rem);
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 35px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            pointer-events: all;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 1s forwards;
+        }
+
+        .button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .button.active {
             opacity: 0.3;
             pointer-events: none;
         }
 
-        .bokeh-light {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(60px);
-            animation: floatBokeh 20s infinite ease-in-out;
-        }
-
-        .bokeh-1 {
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(138, 43, 226, 0.4) 0%, transparent 70%);
-            top: 10%;
-            left: 15%;
-            animation-delay: 0s;
-        }
-
-        .bokeh-2 {
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, rgba(0, 123, 255, 0.3) 0%, transparent 70%);
-            top: 60%;
-            right: 20%;
-            animation-delay: 5s;
-        }
-
-        .bokeh-3 {
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(255, 105, 180, 0.3) 0%, transparent 70%);
-            bottom: 20%;
-            left: 25%;
-            animation-delay: 10s;
-        }
-
-        @keyframes floatBokeh {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(30px, -30px) scale(1.1); }
-            50% { transform: translate(-20px, 20px) scale(0.9); }
-            75% { transform: translate(20px, 10px) scale(1.05); }
-        }
-
-        /* Snow canvas */
-        #snowCanvas, #particleCanvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        /* Main container */
-        .container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-
-        /* Christmas tree container */
-        .tree-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 40px;
-        }
-
-        /* SVG Tree */
-        .christmas-tree {
-            width: min(500px, 80vw);
-            height: auto;
-            filter: drop-shadow(0 0 20px rgba(46, 213, 115, 0.3));
-        }
-
-        /* Tree layers */
-        .tree-layer {
-            fill: #2ecc71;
-            stroke: #27ae60;
-            stroke-width: 2;
-            filter: drop-shadow(0 0 8px rgba(46, 213, 115, 0.5));
-        }
-
-        .tree-trunk {
-            fill: #8b4513;
-            stroke: #6b3410;
-            stroke-width: 2;
-        }
-
-        /* Ornaments */
-        .ornament {
-            animation: ornamentGlow 3s infinite ease-in-out;
-        }
-
-        .ornament-1 { fill: #e74c3c; animation-delay: 0s; }
-        .ornament-2 { fill: #f39c12; animation-delay: 0.5s; }
-        .ornament-3 { fill: #3498db; animation-delay: 1s; }
-        .ornament-4 { fill: #9b59b6; animation-delay: 1.5s; }
-        .ornament-5 { fill: #e91e63; animation-delay: 2s; }
-        .ornament-6 { fill: #00bcd4; animation-delay: 2.5s; }
-
-        @keyframes ornamentGlow {
-            0%, 100% { filter: drop-shadow(0 0 3px currentColor); opacity: 0.9; }
-            50% { filter: drop-shadow(0 0 10px currentColor); opacity: 1; }
-        }
-
-        /* Tree lights */
-        .tree-light {
-            animation: twinkle 2s infinite ease-in-out;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.5; fill-opacity: 0.6; }
-            50% { opacity: 1; fill-opacity: 1; }
-        }
-
-        .light-1 { fill: #ffd700; animation-delay: 0s; }
-        .light-2 { fill: #00ffff; animation-delay: 0.3s; }
-        .light-3 { fill: #ff69b4; animation-delay: 0.6s; }
-        .light-4 { fill: #ffd700; animation-delay: 0.9s; }
-        .light-5 { fill: #00ffff; animation-delay: 1.2s; }
-        .light-6 { fill: #ff69b4; animation-delay: 1.5s; }
-        .light-7 { fill: #ffd700; animation-delay: 1.8s; }
-
-        /* Enhanced lights state */
-        body.lights-on .tree-light {
-            animation: twinkleBright 1.5s infinite ease-in-out;
-        }
-
-        @keyframes twinkleBright {
-            0%, 100% { opacity: 0.8; fill-opacity: 0.9; filter: drop-shadow(0 0 5px currentColor); }
-            50% { opacity: 1; fill-opacity: 1; filter: drop-shadow(0 0 15px currentColor); }
-        }
-
-        body.lights-on .ornament {
-            filter: drop-shadow(0 0 15px currentColor);
-        }
-
-        body.lights-on .tree-layer {
-            filter: drop-shadow(0 0 15px rgba(46, 213, 115, 0.6));
-        }
-
-        /* Star on top */
-        .star {
-            fill: url(#starGradient);
-            stroke: #ffd700;
-            stroke-width: 1;
-            filter: drop-shadow(0 0 10px #ffd700);
-            animation: starPulse 2s infinite ease-in-out;
-        }
-
-        @keyframes starPulse {
-            0%, 100% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.1); opacity: 1; }
-        }
-
-        /* Main title */
-        .main-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(2rem, 6vw, 4rem);
-            font-weight: 700;
-            color: #fff;
-            text-align: center;
-            letter-spacing: 0.1em;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.6),
-                         0 0 40px rgba(255, 215, 0, 0.4);
-            margin-bottom: 20px;
-            animation: titleFloat 3s infinite ease-in-out;
-            position: relative;
-            z-index: 10;
-        }
-
-        @keyframes titleFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        /* Subtitle */
-        .subtitle {
-            font-family: 'Inter', sans-serif;
-            font-size: clamp(0.9rem, 2vw, 1.2rem);
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.8);
-            letter-spacing: 0.15em;
-            margin-bottom: 40px;
-        }
-
-        /* Small ornament tag - "Sun, you're my home." */
-        .small-tag {
-            position: absolute;
-            top: 35%;
-            right: 8%;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-family: 'Inter', sans-serif;
-            font-size: clamp(0.65rem, 1.5vw, 0.85rem);
-            color: #fff;
-            text-shadow: 0 0 5px rgba(255, 105, 180, 0.5);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            animation: tagSway 4s infinite ease-in-out;
-            transform-origin: top center;
-            z-index: 5;
-        }
-
-        .small-tag::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 1px;
-            height: 20px;
-            background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.5));
-        }
-
-        @keyframes tagSway {
-            0%, 100% { transform: rotate(3deg); }
-            50% { transform: rotate(-3deg); }
-        }
-
-        /* Button */
-        .light-button {
-            background: linear-gradient(135deg, rgba(138, 43, 226, 0.4), rgba(255, 105, 180, 0.4));
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 15px 40px;
-            border-radius: 50px;
-            color: #fff;
-            font-family: 'Inter', sans-serif;
-            font-size: clamp(0.9rem, 2vw, 1.1rem);
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 32px rgba(138, 43, 226, 0.3);
-            letter-spacing: 0.05em;
-            position: relative;
-            z-index: 10;
-        }
-
-        .light-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(255, 105, 180, 0.5);
-            background: linear-gradient(135deg, rgba(138, 43, 226, 0.6), rgba(255, 105, 180, 0.6));
-        }
-
-        .light-button:active {
-            transform: translateY(0);
-        }
-
-        /* Footer signature */
-        .signature {
-            position: absolute;
-            bottom: 20px;
-            right: 30px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.4);
-            letter-spacing: 0.1em;
-        }
-
-        /* Reduced motion */
         @media (prefers-reduced-motion: reduce) {
             * {
                 animation-duration: 0.01ms !important;
@@ -310,217 +136,155 @@
             }
         }
 
-        /* Mobile adjustments */
         @media (max-width: 768px) {
-            .small-tag {
-                top: 30%;
-                right: 5%;
-                padding: 6px 10px;
+            .content {
+                padding-top: 5vh;
             }
-
-            .light-button {
-                padding: 12px 30px;
-            }
-
-            .signature {
-                bottom: 15px;
-                right: 15px;
-                font-size: 0.65rem;
+            .tag {
+                top: 48%;
+                left: 60%;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Background bokeh -->
-    <div class="bg-bokeh">
-        <div class="bokeh-light bokeh-1"></div>
-        <div class="bokeh-light bokeh-2"></div>
-        <div class="bokeh-light bokeh-3"></div>
+    <canvas id="canvas"></canvas>
+
+    <div class="content">
+        <h1 class="title">MERRY XMAS SUN</h1>
+        <div class="tag">Sun, you're my home.</div>
+        <button class="button" id="lightBtn">Turn on the lights ✨</button>
     </div>
-
-    <!-- Snow canvas -->
-    <canvas id="snowCanvas"></canvas>
-
-    <!-- Particle canvas for hearts -->
-    <canvas id="particleCanvas"></canvas>
-
-    <!-- Main container -->
-    <div class="container">
-        <div class="tree-container">
-            <!-- SVG Christmas Tree -->
-            <svg class="christmas-tree" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
-                <!-- Gradients -->
-                <defs>
-                    <linearGradient id="starGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#ffed4e;stop-opacity:1" />
-                    </linearGradient>
-                </defs>
-
-                <!-- Tree trunk -->
-                <rect class="tree-trunk" x="175" y="420" width="50" height="70" rx="5" />
-
-                <!-- Tree layers (bottom to top) -->
-                <path class="tree-layer" d="M 200 420 L 120 320 L 140 320 L 80 240 L 100 240 L 60 170 L 340 170 L 300 240 L 320 240 L 260 320 L 280 320 Z" />
-
-                <!-- Ornaments -->
-                <circle class="ornament ornament-1" cx="150" cy="280" r="12" />
-                <circle class="ornament ornament-2" cx="250" cy="290" r="10" />
-                <circle class="ornament ornament-3" cx="200" cy="320" r="11" />
-                <circle class="ornament ornament-4" cx="180" cy="240" r="9" />
-                <circle class="ornament ornament-5" cx="220" cy="250" r="10" />
-                <circle class="ornament ornament-6" cx="140" cy="210" r="8" />
-
-                <!-- Tree lights -->
-                <circle class="tree-light light-1" cx="130" cy="300" r="5" />
-                <circle class="tree-light light-2" cx="230" cy="310" r="5" />
-                <circle class="tree-light light-3" cx="200" cy="270" r="5" />
-                <circle class="tree-light light-4" cx="160" cy="220" r="5" />
-                <circle class="tree-light light-5" cx="240" cy="230" r="5" />
-                <circle class="tree-light light-6" cx="200" cy="200" r="5" />
-                <circle class="tree-light light-7" cx="170" cy="180" r="5" />
-
-                <!-- Star on top -->
-                <path class="star" d="M 200 140 L 210 160 L 232 164 L 216 180 L 220 202 L 200 192 L 180 202 L 184 180 L 168 164 L 190 160 Z" transform="translate(0, 10)" />
-            </svg>
-
-            <!-- Small ornament tag -->
-            <div class="small-tag">Sun, you're my home.</div>
-        </div>
-
-        <!-- Main title -->
-        <h1 class="main-title">Merry Xmas Sun</h1>
-
-        <!-- Subtitle -->
-        <p class="subtitle">For my sunshine.</p>
-
-        <!-- Light button -->
-        <button class="light-button" id="lightBtn">Turn on the lights ✨</button>
-    </div>
-
-    <!-- Footer signature -->
-    <div class="signature">Made with love</div>
 
     <script>
-        // ========== Snow Effect ==========
-        const snowCanvas = document.getElementById('snowCanvas');
-        const snowCtx = snowCanvas.getContext('2d');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, centerX, centerY;
+        let isLightsOn = false;
+        let transitionProgress = 0;
+        let heartParticles = [];
         let snowflakes = [];
-        let snowIntensity = 50; // Initial snowflake count
 
-        function resizeCanvas() {
-            snowCanvas.width = window.innerWidth;
-            snowCanvas.height = window.innerHeight;
-            particleCanvas.width = window.innerWidth;
-            particleCanvas.height = window.innerHeight;
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            centerX = width / 2;
+            centerY = height * 0.72;
         }
 
+        // Tree structure
+        const tree = {
+            x: 0,
+            y: 0,
+            height: 0,
+            width: 0,
+            init() {
+                this.height = Math.min(height * 0.45, 400);
+                this.width = this.height * 0.65;
+                this.x = centerX;
+                this.y = centerY;
+            }
+        };
+
+        // Light points
+        let lights = [];
+
+        function initLights() {
+            lights = [];
+            const offCount = 6;
+            const onCount = 70;
+            const count = isLightsOn ? onCount : offCount;
+
+            for (let i = 0; i < count; i++) {
+                const layer = Math.random();
+                const xOffset = (Math.random() - 0.5) * tree.width * (1 - layer * 0.7);
+                const yOffset = -Math.random() * tree.height * 0.85;
+
+                lights.push({
+                    x: xOffset,
+                    y: yOffset,
+                    size: Math.random() * 2 + 1,
+                    opacity: Math.random() * 0.3 + 0.1,
+                    phase: Math.random() * Math.PI * 2,
+                    speed: Math.random() * 0.3 + 0.2,
+                    hue: Math.random() > 0.85 ? (Math.random() > 0.5 ? 180 : 320) : 40
+                });
+            }
+        }
+
+        // Snowflakes
         class Snowflake {
             constructor() {
                 this.reset();
-                this.y = Math.random() * snowCanvas.height;
+                this.y = Math.random() * height;
             }
 
             reset() {
-                this.x = Math.random() * snowCanvas.width;
+                this.x = Math.random() * width;
                 this.y = -10;
-                this.radius = Math.random() * 3 + 1;
-                this.speed = Math.random() * 1 + 0.5;
-                this.wind = Math.random() * 0.5 - 0.25;
-                this.opacity = Math.random() * 0.6 + 0.4;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.speed = Math.random() * 0.3 + 0.1;
+                this.opacity = Math.random() * 0.3 + 0.1;
             }
 
             update() {
                 this.y += this.speed;
-                this.x += this.wind;
-
-                if (this.y > snowCanvas.height) {
-                    this.reset();
-                }
-
-                if (this.x > snowCanvas.width || this.x < 0) {
-                    this.x = Math.random() * snowCanvas.width;
-                }
+                this.x += Math.sin(this.y * 0.01) * 0.3;
+                if (this.y > height) this.reset();
             }
 
             draw() {
-                snowCtx.beginPath();
-                snowCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                snowCtx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
-                snowCtx.fill();
-                snowCtx.closePath();
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.fill();
             }
         }
 
         function initSnow() {
             snowflakes = [];
-            for (let i = 0; i < snowIntensity; i++) {
+            const count = isLightsOn ? 15 : 3;
+            for (let i = 0; i < count; i++) {
                 snowflakes.push(new Snowflake());
             }
         }
 
-        function animateSnow() {
-            snowCtx.clearRect(0, 0, snowCanvas.width, snowCanvas.height);
-            snowflakes.forEach(flake => {
-                flake.update();
-                flake.draw();
-            });
-            requestAnimationFrame(animateSnow);
-        }
-
-        // ========== Heart Particle Effect ==========
-        const particleCanvas = document.getElementById('particleCanvas');
-        const particleCtx = particleCanvas.getContext('2d');
-        let heartParticles = [];
-        let particleAnimating = false;
-
+        // Heart particle ring
         class HeartParticle {
             constructor(angle, radius) {
-                const centerX = window.innerWidth / 2;
-                const centerY = window.innerHeight / 2 - 50;
-
-                this.startAngle = angle;
+                this.angle = angle;
+                this.baseRadius = radius;
                 this.radius = radius;
                 this.x = centerX + Math.cos(angle) * radius;
-                this.y = centerY + Math.sin(angle) * radius;
-                this.size = Math.random() * 8 + 6;
+                this.y = centerY - tree.height * 0.4 + Math.sin(angle) * radius * 0.6;
+                this.size = Math.random() * 4 + 3;
                 this.opacity = 1;
-                this.hue = Math.random() * 60 + 320; // Pink to red range
                 this.life = 0;
-                this.maxLife = 60; // frames (~1 second at 60fps)
+                this.maxLife = 60;
             }
 
             update() {
                 this.life++;
-                this.opacity = 1 - (this.life / this.maxLife);
-
-                // Slight outward expansion
-                const expansion = this.life * 0.5;
-                const centerX = window.innerWidth / 2;
-                const centerY = window.innerHeight / 2 - 50;
-                this.x = centerX + Math.cos(this.startAngle) * (this.radius + expansion);
-                this.y = centerY + Math.sin(this.startAngle) * (this.radius + expansion);
+                this.opacity = Math.max(0, 1 - this.life / this.maxLife);
+                this.radius = this.baseRadius + this.life * 0.8;
+                this.x = centerX + Math.cos(this.angle) * this.radius;
+                this.y = centerY - tree.height * 0.4 + Math.sin(this.angle) * this.radius * 0.6;
             }
 
             draw() {
-                particleCtx.save();
-                particleCtx.translate(this.x, this.y);
-                particleCtx.globalAlpha = this.opacity;
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.globalAlpha = this.opacity;
 
-                // Draw heart shape
                 const size = this.size;
-                particleCtx.fillStyle = `hsl(${this.hue}, 80%, 60%)`;
-                particleCtx.beginPath();
-                particleCtx.moveTo(0, size / 4);
-                particleCtx.bezierCurveTo(-size / 2, -size / 4, -size, size / 8, 0, size);
-                particleCtx.bezierCurveTo(size, size / 8, size / 2, -size / 4, 0, size / 4);
-                particleCtx.fill();
+                ctx.fillStyle = `rgba(255, 200, 220, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.moveTo(0, size * 0.3);
+                ctx.bezierCurveTo(-size * 0.5, -size * 0.3, -size, size * 0.1, 0, size);
+                ctx.bezierCurveTo(size, size * 0.1, size * 0.5, -size * 0.3, 0, size * 0.3);
+                ctx.fill();
 
-                // Glow effect
-                particleCtx.shadowBlur = 10;
-                particleCtx.shadowColor = `hsl(${this.hue}, 80%, 60%)`;
-
-                particleCtx.restore();
+                ctx.restore();
             }
 
             isDead() {
@@ -530,77 +294,202 @@
 
         function createHeartRing() {
             heartParticles = [];
-            const numParticles = 40;
-            const baseRadius = Math.min(window.innerWidth, window.innerHeight) * 0.25;
+            const numParticles = 35;
+            const baseRadius = Math.min(width, height) * 0.18;
 
             for (let i = 0; i < numParticles; i++) {
                 const angle = (Math.PI * 2 / numParticles) * i;
-                const radius = baseRadius + (Math.random() * 30 - 15); // Slight variation
-                heartParticles.push(new HeartParticle(angle, radius));
+                heartParticles.push(new HeartParticle(angle, baseRadius));
             }
-
-            particleAnimating = true;
         }
 
-        function animateParticles() {
-            particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+        // Draw functions
+        function drawTree() {
+            const x = tree.x;
+            const y = tree.y;
+            const h = tree.height;
+            const w = tree.width;
 
-            if (particleAnimating) {
-                heartParticles = heartParticles.filter(p => !p.isDead());
-                heartParticles.forEach(particle => {
-                    particle.update();
-                    particle.draw();
-                });
+            // Tree silhouette
+            const treeAlpha = isLightsOn ? 0.25 : 0.15;
+            const treeColor = `rgba(20, 35, 30, ${treeAlpha})`;
 
-                if (heartParticles.length === 0) {
-                    particleAnimating = false;
-                }
-            }
+            ctx.fillStyle = treeColor;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x - w * 0.5, y - h * 0.25);
+            ctx.lineTo(x - w * 0.4, y - h * 0.25);
+            ctx.lineTo(x - w * 0.55, y - h * 0.5);
+            ctx.lineTo(x - w * 0.45, y - h * 0.5);
+            ctx.lineTo(x - w * 0.6, y - h * 0.75);
+            ctx.lineTo(x - w * 0.5, y - h * 0.75);
+            ctx.lineTo(x, y - h);
+            ctx.lineTo(x + w * 0.5, y - h * 0.75);
+            ctx.lineTo(x + w * 0.6, y - h * 0.75);
+            ctx.lineTo(x + w * 0.45, y - h * 0.5);
+            ctx.lineTo(x + w * 0.55, y - h * 0.5);
+            ctx.lineTo(x + w * 0.4, y - h * 0.25);
+            ctx.lineTo(x + w * 0.5, y - h * 0.25);
+            ctx.closePath();
+            ctx.fill();
 
-            requestAnimationFrame(animateParticles);
+            // Trunk
+            ctx.fillStyle = `rgba(40, 30, 20, ${treeAlpha * 1.2})`;
+            ctx.fillRect(x - w * 0.06, y, w * 0.12, h * 0.12);
         }
 
-        // ========== Button Interaction ==========
-        const lightBtn = document.getElementById('lightBtn');
-        let lightsOn = false;
+        function drawLights(time) {
+            lights.forEach(light => {
+                const baseOpacity = isLightsOn ? 0.7 : 0.15;
+                const pulse = Math.sin(time * 0.001 * light.speed + light.phase) * 0.3 + 0.7;
+                const opacity = baseOpacity * pulse * light.opacity;
 
-        lightBtn.addEventListener('click', () => {
-            lightsOn = !lightsOn;
+                const x = tree.x + light.x;
+                const y = tree.y + light.y;
 
-            if (lightsOn) {
-                // Add lights-on class to body
-                document.body.classList.add('lights-on');
+                // Glow
+                const gradient = ctx.createRadialGradient(x, y, 0, x, y, light.size * (isLightsOn ? 8 : 3));
+                gradient.addColorStop(0, `hsla(${light.hue}, 70%, 70%, ${opacity})`);
+                gradient.addColorStop(1, `hsla(${light.hue}, 70%, 70%, 0)`);
+                ctx.fillStyle = gradient;
+                ctx.fillRect(x - light.size * 8, y - light.size * 8, light.size * 16, light.size * 16);
 
-                // Increase snow intensity
-                const additionalSnow = 30;
-                for (let i = 0; i < additionalSnow; i++) {
-                    snowflakes.push(new Snowflake());
-                }
+                // Core
+                ctx.beginPath();
+                ctx.arc(x, y, light.size, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${light.hue}, 80%, 85%, ${opacity * 1.5})`;
+                ctx.fill();
+            });
+        }
 
-                // Create heart particle ring
-                createHeartRing();
+        function drawStar(time) {
+            const x = tree.x;
+            const y = tree.y - tree.height;
+            const size = tree.height * 0.08;
+            const starOpacity = isLightsOn ? 0.9 : 0.2;
+            const pulse = isLightsOn ? (Math.sin(time * 0.001) * 0.15 + 0.85) : 1;
 
-                // Update button text
-                lightBtn.textContent = 'Lights are on! 💖';
-
-                // Reset after animation
-                setTimeout(() => {
-                    lightBtn.textContent = 'Turn on the lights ✨';
-                    lightsOn = false;
-                    document.body.classList.remove('lights-on');
-
-                    // Reduce snow back to normal
-                    snowflakes = snowflakes.slice(0, snowIntensity);
-                }, 3000);
+            // Glow
+            if (isLightsOn) {
+                const gradient = ctx.createRadialGradient(x, y, 0, x, y, size * 3);
+                gradient.addColorStop(0, `rgba(255, 230, 150, ${starOpacity * 0.3 * pulse})`);
+                gradient.addColorStop(1, 'rgba(255, 230, 150, 0)');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(x - size * 3, y - size * 3, size * 6, size * 6);
             }
+
+            // Star shape
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(time * 0.0001);
+            ctx.fillStyle = `rgba(255, 240, 200, ${starOpacity * pulse})`;
+            ctx.beginPath();
+            for (let i = 0; i < 8; i++) {
+                const angle = (Math.PI * 2 / 8) * i;
+                const r = i % 2 === 0 ? size : size * 0.4;
+                const px = Math.cos(angle) * r;
+                const py = Math.sin(angle) * r;
+                if (i === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+
+        // Animation loop
+        function animate(time) {
+            // Background
+            const gradient = ctx.createLinearGradient(0, 0, 0, height);
+            gradient.addColorStop(0, '#1a2a3a');
+            gradient.addColorStop(0.4, '#2d4157');
+            gradient.addColorStop(1, '#1f3242');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+
+            // Ground (barely visible)
+            ctx.fillStyle = 'rgba(10, 15, 20, 0.3)';
+            ctx.fillRect(0, centerY, width, height - centerY);
+
+            // Snow
+            snowflakes.forEach(flake => {
+                flake.update();
+                flake.draw();
+            });
+
+            // Tree and decorations
+            drawTree();
+            drawLights(time);
+            drawStar(time);
+
+            // Heart particles
+            heartParticles = heartParticles.filter(p => !p.isDead());
+            heartParticles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        // Button interaction
+        document.getElementById('lightBtn').addEventListener('click', function() {
+            if (isLightsOn) return;
+
+            isLightsOn = true;
+            this.classList.add('active');
+
+            // Smooth transition
+            const startLights = [...lights];
+            initLights();
+            const endLights = lights;
+            lights = startLights;
+
+            let progress = 0;
+            const duration = 1200;
+            const startTime = Date.now();
+
+            function transition() {
+                progress = Math.min(1, (Date.now() - startTime) / duration);
+                const eased = progress < 0.5
+                    ? 2 * progress * progress
+                    : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+                if (progress < 1) {
+                    requestAnimationFrame(transition);
+                } else {
+                    lights = endLights;
+                }
+            }
+            transition();
+
+            // Add more snow
+            const currentCount = snowflakes.length;
+            for (let i = 0; i < 12; i++) {
+                snowflakes.push(new Snowflake());
+            }
+
+            // Heart ring
+            createHeartRing();
+
+            // Update button
+            setTimeout(() => {
+                this.textContent = 'Lights on';
+            }, 1500);
         });
 
-        // ========== Initialize ==========
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        // Initialize
+        window.addEventListener('resize', () => {
+            resize();
+            tree.init();
+            initLights();
+        });
+
+        resize();
+        tree.init();
+        initLights();
         initSnow();
-        animateSnow();
-        animateParticles();
+        animate(0);
     </script>
 </body>
 </html>
